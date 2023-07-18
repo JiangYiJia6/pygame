@@ -40,6 +40,35 @@ class Player(pygame.sprite.Sprite):
      def update(self):
           self.player_input()
           self.apply_gravity()
+          self.animation_state()
+
+class Obstacle(pygame.sprite.Sprite):
+     def _int_(self,type):
+
+          super().__init__()
+          if type == "fly":
+               fly_1=pygame.image.load(root_dir + "fly.png").convert_alpha()
+               fly_2=pygame.image.load(root_dir + "fly2.png").convert_alpha()
+               self.frames=[fly_1,fly_2]
+               y_pos =210
+          else:
+               snail_1=pygame.image.load(root_dir + "snail1.png").convert_alpha()
+               snail_2=pygame.image.load(root_dir + "snail2.png").convert_alpha()
+               self.frames=[snail_1,snail_2]
+               y_pos =300
+
+          self.animation_index =0
+          self.image = self.frames[self.animation_index]
+          self.rect = self.image.get_rect(midbottom=(randint(900,1100),y_pos))
+     def animation_state(self):
+          self.animation_index +=0.1
+          if self.animation_index >= len(self.frames):self.animation_index =0
+          self.image   = self.frames[int(self.animation_index)]
+     def update(self):
+          self.animation_state()
+
+
+
 
           
 
@@ -89,8 +118,10 @@ test_font = pygame.font.Font(root_dir +"Pixeltype.ttf", 50)
 game_active = False
 start_time =0
 score =0
+#groups
 player= pygame.sprite.GroupSingle()
 player.add(Player())
+obstacle_group = pygame.sprite.Group()
 
 test_surface = pygame.Surface((100,200))
 test_surface.fill("red")
@@ -171,9 +202,10 @@ while True:
         if game_active:  
      
              if event.type == obstacle_timer :
-                 if randint(0,2):
+               
+                if randint(0,2):
                    obstacle_rect_list.append(snail_surface.get_rect(bottomright=(randint(900,1100),300)))
-                 else:
+                else:
                     obstacle_rect_list.append(fly_surface.get_rect(bottomright=(randint(900,1100),210)))
         
              if event.type == snail_animation_timer:
@@ -211,8 +243,9 @@ while True:
         if player_rect.bottom >=300:player_rect.bottom = 300
         player_animation()
         screen.blit(player_surface, player_rect)
-        player.draw(screen)
+        
         player.update()
+       
         
 
         #obstacles movement

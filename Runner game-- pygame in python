@@ -1,4 +1,4 @@
-Runner game-- pygame in python
+
 This project is an example that was built along with a YouTube video series showing how to create a runner game in xpygame. Every part of this projects is sample code which shows how to do the following:
 1. The layout of surfaces(player,obstacles,sky groud,text/score)
 2. basic animation for obstacles
